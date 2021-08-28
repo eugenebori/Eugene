@@ -1,0 +1,52 @@
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+public class Day2Clear extends JPanel implements ActionListener{ //Day2(두번째 스테이지) 클리어시 나오는 패널. 
+	Main main; 
+	Image backgroundImage;
+	JButton nextstage;
+	
+	public Day2Clear(Main main) { //생성자에서 Main을 인수로 받음. 
+		this.main = main; //이 패널의 main은 입력받은 Main임. 나중에 이벤트 발생시 Main의 함수로 이동하기 위함.
+		this.setSize(442, 600); //패널의 크기 설정. 너비 높이 각각 442, 600.
+		this.setLayout(null); //레이아웃 설정 안함.
+		
+		try {
+			backgroundImage = ImageIO.read(new File("day2clear.png")); //배경 이미지 불러옴.
+		} catch (IOException e) {
+			e.printStackTrace(); //예외가 발생할 시 자세한 경로를 프린트하도록 함.
+		}
+		
+		makeButton(); //makeButton 메소드 호출.
+	}
+	
+	public void makeButton() {
+		nextstage = new JButton(); //nextstage 버튼 객체 생성. 다음 버튼.
+		
+		//투명버튼 만들기. 이미지에 버튼 모양이 함께 그려져 있기 때문에 그 버튼 이미지 위에 투명버튼을 붙일 것임.
+		nextstage.setBounds(143, 309, 163, 59); //외곽선 설정. x,y좌표와 너비, 높이를 적어줌.
+		nextstage.setBorderPainted(false); //외곽선 없애줌.
+		nextstage.setFocusPainted(false); //선택(focus)되었을 때 생기는 테두리 사용 안함.
+		nextstage.setContentAreaFilled(false); //내용 영역 채우기 안함.
+		nextstage.addActionListener(this); //버튼 클릭시 이벤트 처리.
+		this.add(nextstage); //패널에 버튼 추가.
+
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(backgroundImage, 0, 0, 442, 600, null); //배경 이미지를 패널에 그림.
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		main.Day2ClearToNext(); //버튼 클릭시 Day2ClearToNext 함수로 이동.
+	}
+}
